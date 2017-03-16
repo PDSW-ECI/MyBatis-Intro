@@ -1,13 +1,13 @@
-###Escuela Colombiana de Ingeniería
-###Procesos de desarrollo de Software - PDSW
-####Tecnologías de persistencia - Frameworks de Persistencia - Introducción a MyBatis
+### Escuela Colombiana de Ingeniería
+### Procesos de desarrollo de Software - PDSW
+#### Tecnologías de persistencia - Frameworks de Persistencia - Introducción a MyBatis
 
 
 En este laboratorio, se realizará el mismo ejercicio desarrollado semanas atrás con JDBC 'plano', pero esta vez haciendo uso de un 'framework' de persistencia.
 
 ![](img/PACIENTES_CONSULTAS.png)
 
-##Parte I
+## Parte I
 
 1. Agregue como dependencias el driver de MySQL, el driver de H2, y la librería de MyBatis:
 
@@ -99,13 +99,13 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
 
 	```sql	
 	select ma.propiedad1, det.propiedad1 ....
-```	
+	```	
 
 	Se debería cambiar a:
 
 	```sql		
 	select ma.propiedad1, det.propiedad1 as detalle_propiedad1
-```
+	```
 
 	Y posteriormente, en la 'colección' o en la 'asociación' correspondiente en el 'resultMap', indicar que las propiedades asociadas a ésta serán aquellas que tengan un determinado prefijo:
 
@@ -117,7 +117,7 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
         <result property='propiedad3' column='COLUMNA3'/>        
         <collection property='propiedad4' ofType='Detalle' columnPrefix='detalle_'></collection>
     </resultMap>
-```
+	```
 
 
 8. Use el programa de prueba suministrado (MyBatisExample) para probar cómo a través del 'mapper' generado por MyBatis, se puede consultar un paciente. 
@@ -141,7 +141,7 @@ Ahora, va a asociar consultas SQL a las dos operaciones restantes de la interfaz
     <insert id="insertPaciente">
 		COMPLETAR
     </insert>
-```
+	```
 
 2. Implemente el &lt;insert&gt; para 'insertConsulta', haciendo referencia a los parámetros recibidos por el método de la interfaz (usando #{}). En este caso, dado CONSULTAS tiene una llave autogenerada, se debe agregar la propiedad 'useGeneratedKeys' en "true", y la propiedad "keyProperty" asociándole el atributo del objeto en el cual se almacenará la llave primaria generada. Por ejemplo, si el parámetro Consulta se declaró como "con":   
 
