@@ -27,7 +27,7 @@ En este laboratorio, se realizará el mismo ejercicio desarrollado semanas atrá
             <artifactId>h2</artifactId>
             <version>1.4.184</version>
         </dependency>        
-```
+	```
 
 2. Ubique el archivo de configuración de MyBATIS (mybatis-config.xml). Éste está en la ruta donde normalmente se ubican los archivos de configuración de aplicaciones montadas en Maven (src/main/resources). Edítelo y agregue en éste, después de la sección &lt;settings&gt; los siguientes 'typeAliases':
 
@@ -36,13 +36,13 @@ En este laboratorio, se realizará el mismo ejercicio desarrollado semanas atrá
         <typeAlias type='edu.eci.pdsw.samples.entities.Consulta' alias='Consulta'/>
         <typeAlias type='edu.eci.pdsw.samples.entities.Paciente' alias='Paciente'/>
     </typeAliases>
-```
+	```
 
 3. Ahora, ubique y abra la interfaz del 'mapper' que se configurará para manipular la persistecia de los objetos de tipo Paciente (PacienteMapper). A cada uno de los parámetros de los tres métodos, agruéguele una anotación de tipo @Param para asociarle -al respectivo parámetro- el nombre con el cual se referenciará desde la definción del 'mapper'. Por ejemplo, para el primer método:
 
 	```java
 public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpaciente") String tipoid);
-```
+	```
 
 4. Abra el archivo XML en el cual se definirán los parámetros para que MyBatis genere el 'mapper' de Paciente (PacienteMapper.xml). Lo primero que debe hacer, es agregar un elemento de tipo &lt;resultMap&gt;, en el cual se defina, para una entidad(clase) en particular, a qué columnas estarán asociadas cada una de sus propiedades (recuerde que propiedad != atributo). La siguiente es un ejemplo del uso de la sintaxis de &lt;resultMap&gt; para la clase Maestro, la cual tiene una relación 'uno a muchos' con la clase Detalle: 
 
@@ -58,7 +58,7 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
         <result property='propiedady' column='COLUMNAY'/>
         <result property='propiedadz' column='COLUMNAZ'/>        
     </resultMap>
-```
+	```
 
 	Como observa, Para cada propiedad de la clase se agregará un elemento de tipo &lt;result&gt;, el cual, en la propiedad 'property' indicará el nombre de la propiedad, y en la columna 'column' indicará el nombre de la columna de su tabla correspondiente (en la que se hará persistente). En caso de que la columna sea una llave primaria, en lugar de 'result' se usará un elemento de tipo 'id'. Finalmente, observe que si la clase tiene un atributo de tipo colección (List, Set, etc), se agregará un elemento de tipo &lt;collection&gt;, indicando (en la propiedad 'ofType') de qué tipo son los elementos de la colección. En cuanto al indentificador del 'resultMap', como convención se suele utilizar el nombre del tipo de dato concatenado con 'Result' como sufijo.
 	
@@ -68,7 +68,7 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
 
 	```xml
 	<collection property='propiedad3' ofType='Detalle' resultMap='DetalleResult'></collection>
-```
+	```
 
 	Teniendo en cuenta lo anterior, haga los ajustes correspondientes en la configuración para el caso del modelo de Pacientes y Consultas.
 
@@ -78,7 +78,7 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
 
 	```java
 	public List<Maestro> consultarMaestrosEspeciales(@Param("salario") int id, @Param("categoria")int cat);
-```
+	```
 
 	Su elemento &lt;select&gt; correspondiente sería:
 
@@ -87,7 +87,7 @@ public Paciente loadPacienteById(@Param("idpaciente")int id,@Param("tipoidpacien
         select ma.propiedad1, ma.propiedad2, ma.propiedad3, det.propiedadx, det.propiedady, det.propiedadz from MAESTROS as ma left join DETALLES as det on ...
         where ma.propiedad2> #{salario} and ma.propiedad3< #{categoria} 
     </select>
-```
+	```
 	De lo anterior, note que:
 	* En la propiedad 'parameterType' se usa 'map' dado que el método del mapper recibe más de un parámetro.
 	* En el query se hace uso de la conveción #{} para hacer referencia a los parámetros que se enviarán a través del método definido en la interfaz del mapper.
@@ -129,7 +129,7 @@ SqlSession sqlss = sessionfact.openSession();
 PacienteMapper pedmp=sqlss.getMapper(PacienteMapper.class);
 System.out.println(pedmp.loadPacienteById(1, "cc"));
 ...
-```
+	```
 
 ##Parte II
 
@@ -147,14 +147,14 @@ Ahora, va a asociar consultas SQL a las dos operaciones restantes de la interfaz
 
 	```java
 public void insertConsulta(@Param("con") Consulta con,@Param("pacid")int id,@Param("pactipoid")String tipoid);
-```
+	```
 	La propiedad 'keyProperty' tendrá como valor "con.id":
 	
 	```xml
     <insert id="insertConsulta" useGeneratedKeys="true" keyProperty="con.id">
     	COMPLETAR
     </insert>
-```
+	```
 3. Usando las dos operaciones del mapper (que ya quedaron configuradas), implemente el método 'registrarNuevoPaciente', el cual, como lo indica su especificación, debe registrar un nuevo paciente y sus consultas relacionadas.
 
 
